@@ -1,62 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamic Quote Generator with Web Storage</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dynamic Quote Generator — Sync & Conflict Resolution</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      text-align: center;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #333;
-    }
-
-    #quoteDisplay {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      width: 80%;
-      max-width: 500px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    button {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    input[type="file"] {
-      margin-top: 10px;
-    }
+    body { font-family: Arial, sans-serif; padding: 24px; background:#f4f6f8; color:#222; }
+    #quoteDisplay { background:#fff; padding:18px; border-radius:8px; width:70%; margin:14px auto; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
+    .controls { text-align:center; margin:10px 0; }
+    button { padding:10px 14px; margin:6px; border-radius:6px; border:none; cursor:pointer; background:#0066ff; color:#fff; }
+    button.secondary { background:#6c757d; }
+    #notification { margin: 10px auto; width:70%; padding:10px; border-radius:6px; display:none; }
+    /* conflict modal */
+    #conflictModal { position:fixed; top:0; left:0; right:0; bottom:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.5); z-index:1000; }
+    #conflictBox { background:#fff; width:90%; max-width:700px; padding:18px; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,0.2); }
+    .conflict-item { border-bottom:1px solid #eee; padding:8px 0; }
+    .conflict-choices { margin-top:8px; }
+    .meta { font-size:0.9em; color:#666; }
+    input[type="text"] { padding:8px; border-radius:6px; border:1px solid #ccc; margin:6px; width:calc(50% - 24px); }
+    label { display:block; margin:6px 0; }
   </style>
 </head>
 <body>
-  <h1>Dynamic Quote Generator</h1>
-  <div id="quoteDisplay">Click below to generate a quote!</div>
+  <h1>Dynamic Quote Generator — Sync & Conflict Resolution</h1>
 
-  <button onclick="generateQuote()">Generate Quote</button>
-  <button onclick="addQuote()">Add New Quote</button>
-  <button onclick="exportToJsonFile()">Export Quotes (JSON)</button>
+  <div id="quoteDisplay"></div>
 
-  <br />
-  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <div class="controls">
+    <button id="newQuote">Show New Quote</button>
+    <button id="syncNow">Sync Now</button>
+    <button id="toggleAuto" class="secondary">Auto-sync: ON</button>
+    <button id="exportJson">Export Quotes</button>
+    <button id="clearStorage" class="secondary">Reset Local Data</button>
+  </div>
 
+  <!-- Notification -->
+  <div id="notification"></div>
+
+  <!-- Conflict modal -->
+  <div id="conflictModal" role="dialog" aria-modal="true">
+    <div id="conflictBox">
+      <h3>Conflicts detected during sync</h3>
+      <div id="conflictList"></div>
+      <div style="text-align:right; margin-top:12px;">
+        <button id="resolveAllServer" class="">Keep Server Versions (Apply to all)</button>
+        <button id="resolveAllLocal" class="secondary">Keep Local Versions (Apply to all)</button>
+        <button id="closeModal" class="secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- dynamic add form will be created by script.js -->
   <script src="script.js"></script>
 </body>
 </html>
