@@ -90,3 +90,4 @@ window.addEventListener("DOMContentLoaded", function() {
   // Create the dynamic form
   createAddQuoteForm();
 });
+
